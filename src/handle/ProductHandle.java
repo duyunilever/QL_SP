@@ -1,15 +1,16 @@
 package handle;
 
 import entity.Product;
+import view.Menu;
 
 import java.util.Scanner;
 
 public class ProductHandle {
 
     public Product createProduct(Scanner scanner, int i){
-        System.out.println("Mời b nhập vào tên sp thứ "+(i+1));
+        System.out.println("Mời bạn nhập vào tên sp thứ "+(i+1));
         String name = scanner.nextLine();
-        System.out.println("Nhập giá: ");
+        System.out.println("Mời bạn nhập giá: ");
         double price = Double.parseDouble(scanner.nextLine());
         return new Product(name, price);
     }
@@ -21,20 +22,22 @@ public class ProductHandle {
         }
     }
 
-    public void findProductByName(Product[] products, String name){
-        boolean check = false;
+    public String findProductByName(Product[] products,Scanner scanner){
+        System.out.println("Mời bạn nhập tên sản phẩm muốn tìm: ");
+        String name = scanner.nextLine();
         for (Product product: products) {
             if (product.getName().equalsIgnoreCase(name)){
                 System.out.println(product);
-                check= true;
+                return "Đã tìm thấy";
             }
         }
-        if(!check){
-            System.out.println("Không tìm thấy sản phẩm có tên là: "+name);
-        }
+        return ("Không tìm thấy sản phẩm có tên là: "+name);
     }
 
-    public Product findById(Product[] products, int id){
+    public Product findById(Product[] products, Scanner scanner){
+        System.out.println("Mời bạn nhập ID sản phẩm muốn tìm: ");
+        int id = Integer.parseInt(scanner.nextLine());
+        findById(products, scanner);
         for (Product product: products) {
             if (product.getId() == id){
                 return product;
@@ -76,4 +79,15 @@ public class ProductHandle {
             System.out.println(p);
         }
     }
+
+    public void selectTask(Product[] products, Scanner scanner){
+        Menu menu = new Menu();
+        int select = menu.menuSelect(scanner);
+            if (select==1) displayAllProducts(products);
+            else if (select==2) findProductByName(products, scanner);
+            else if (select==3) findById(products, scanner);
+            else if (select==4) filterByPrice(products, menu.menuSelectByPrice(scanner));
+            else if (select==5) sortByPrice(products);
+    }
+
 }
